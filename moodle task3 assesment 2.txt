@@ -1,0 +1,199 @@
+asingment 2
+1)
+
+mysql> Create table Air_passenger_profile(
+    -> Profile_ID varchar(10) primary key,
+    -> Password varchar(10) not null,
+    -> First_Name varchar(10) not null,
+    -> Last_Name varchar(10) not null,
+    -> Address varchar(100) not null,
+    -> MobileNo bigint not null,
+    -> Email_ID varchar(30) not null
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> Create table Air_ticket_info(
+    -> Ticket varchar(10) not null,
+   -> Profile_ID varchar(10) references Air_passenger_profile(Profile_ID),
+    -> Flight_ID varchar(10) not null,
+    -> Flight_Departure_Date date not null,
+    -> Status varchar(10) not null
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+
+mysql> Create table Air_Credit_CardDetails(
+    -> Profile_ID varchar(10) references Air_passemger_profile(Profile_ID),
+    -> CardNo bigint(16) not null,
+    -> Card_type varchar(10),
+    -> Expiration_Month int(2) not null,
+    -> Expiration_Year int(4) not null);
+Query OK, 0 rows affected, 3 warnings (0.01 sec)
+
+
+mysql> Create table Air_Flight_Details(
+    -> Flight_ID varchar(10) not null,
+    -> Flight_Departure_Date date not null,
+    -> Price Decimal(8,2) not null,
+    -> Available_Seats int(11));
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+
+mysql> Alter table Air_Flight_Details add primary key(Flight_ID);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> Alter table Air_ticket_info add Foreign key(Flight_ID) references Air_Flight_Details(Flight_ID);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> Create table Air_Flight(
+    -> Flight_ID varchar(10) references Air_Flight_Details(Flight_ID),
+    -> Airline_ID int not null,
+    -> Airline_Name varchar(30) not null,
+    -> From_Location varchar(20) not null,
+    -> To_Location varchar(20) not null,
+    -> Departure_Time Time not null,
+    -> Arrival_Time Time not null,
+    -> Duration time not null,
+    -> Total_Seats int(11));
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+mysql> show tables;
++------------------------+
+| Tables_in_mc22         |
++------------------------+
+| air_credit_carddetails |
+| air_flight             |
+| air_flight_details     |
+| air_passenger_profile  |
+| air_ticket_info        |
+| customer               |
++------------------------+
+6 rows in set (0.01 sec)
+
+mysql> desc  air_credit_carddetails;
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| Profile_ID       | varchar(10) | YES  |     | NULL    |       |
+| CardNo           | bigint      | NO   |     | NULL    |       |
+| Card_type        | varchar(10) | YES  |     | NULL    |       |
+| Expiration_Month | int         | NO   |     | NULL    |       |
+| Expiration_Year  | int         | NO   |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> desc  air_flight_details;
++-----------------------+--------------+------+-----+---------+-------+
+| Field                 | Type         | Null | Key | Default | Extra |
++-----------------------+--------------+------+-----+---------+-------+
+| Flight_ID             | varchar(10)  | NO   | PRI | NULL    |       |
+| Flight_Departure_Date | date         | NO   |     | NULL    |       |
+| Price                 | decimal(8,2) | NO   |     | NULL    |       |
+| Available_Seats       | int          | YES  |     | NULL    |       |
++-----------------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc  air_flight;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| Flight_ID      | varchar(10) | YES  |     | NULL    |       |
+| Airline_ID     | int         | NO   |     | NULL    |       |
+| Airline_Name   | varchar(30) | NO   |     | NULL    |       |
+| From_Location  | varchar(20) | NO   |     | NULL    |       |
+| To_Location    | varchar(20) | NO   |     | NULL    |       |
+| Departure_Time | time        | NO   |     | NULL    |       |
+| Arrival_Time   | time        | NO   |     | NULL    |       |
+| Duration       | time        | NO   |     | NULL    |       |
+| Total_Seats    | int         | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> desc  air_passenger_profile;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| Profile_ID | varchar(10)  | YES  |     | NULL    |       |
+| Password   | varchar(10)  | NO   |     | NULL    |       |
+| First_Name | varchar(10)  | NO   |     | NULL    |       |
+| Last_Name  | varchar(10)  | NO   |     | NULL    |       |
+| Address    | varchar(100) | NO   |     | NULL    |       |
+| MobileNo   | bigint       | NO   |     | NULL    |       |
+| Email_ID   | varchar(30)  | NO   |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> exit
+
+2)
+mysql> CREATE TABLE Animals (
+    ->     id INT PRIMARY KEY,
+    ->     name VARCHAR(255),
+    ->     species VARCHAR(255),
+    ->     life_span INT,
+    ->     life_expectancy INT(3));
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+mysql> INSERT INTO Animals (id, name, species, life_span) VALUES
+    ->     (1, 'Cat', 'Animal', 20),
+    ->     (2, 'Dog', 'Animal', 25),
+    ->     (3, 'Monkey', 'Animal', 26),
+    ->     (4, 'Elephant', 'Animal', 65),
+    ->     (5, 'Canary', 'Bird', 20),
+    ->     (6, 'Swift', 'Bird', 5),
+    ->     (7, 'Dove', 'Bird', 12),
+    ->     (8, 'Rabbit', 'Animal', 10),
+    ->     (9, 'Cow', 'Animal', 25);
+Query OK, 9 rows affected (0.01 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> Alter table Animals Modify column life_expectancy int(3);
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> aLTER TABLE Animals ADD COLUMN habitat VARCHAR(10);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update Animals set habitat = 'Domestic' where name in('cat','dog','rabbit','cow');
+Query OK, 4 rows affected (0.00 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> update Animals set habitat = 'Wild' where name in('Monkey','Elephnat','Canary','swift','dove');
+Query OK, 4 rows affected (0.00 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> insert into Animals values(10,'Horse','Animal',25,25,'Domestic');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> update Animals set life_expectancy = life_expectancy +5 where habitat= 'Domestic';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 5  Changed: 1  Warnings: 0
+
+mysql> Delete from animals where habitat = 'wild' and life_expectancy < 8;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from animals;
++----+----------+---------+-----------+-----------------+----------+
+| id | name     | species | life_span | life_expectancy | habitat  |
++----+----------+---------+-----------+-----------------+----------+
+|  1 | Cat      | Animal  |        20 |            NULL | Domestic |
+|  2 | Dog      | Animal  |        25 |            NULL | Domestic |
+|  3 | Monkey   | Animal  |        26 |            NULL | Wild     |
+|  4 | Elephant | Animal  |        65 |            NULL | NULL     |
+|  5 | Canary   | Bird    |        20 |            NULL | Wild     |
+|  6 | Swift    | Bird    |         5 |            NULL | Wild     |
+|  7 | Dove     | Bird    |        12 |            NULL | Wild     |
+|  8 | Rabbit   | Animal  |        10 |            NULL | Domestic |
+|  9 | Cow      | Animal  |        25 |            NULL | Domestic |
+| 10 | Horse    | Animal  |        25 |              30 | Domestic |
++----+----------+---------+-----------+-----------------+----------+
+10 rows in set (0.00 sec)
+
+mysql> delete from animals;
+Query OK, 10 rows affected (0.00 sec)
+
+mysql> exit
+

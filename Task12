@@ -1,0 +1,232 @@
+mysql> desc dept;
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| deptno | decimal(2,0) | YES  |     | NULL    |       |
+| dname  | varchar(14)  | YES  |     | NULL    |       |
+| loc    | varchar(13)  | YES  |     | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+3 rows in set (0.05 sec)
+
+mysql> desc emp;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| empno    | decimal(4,0) | NO   |     | NULL    |       |
+| ename    | varchar(10)  | YES  | UNI | NULL    |       |
+| job      | varchar(9)   | YES  |     | NULL    |       |
+| mgr      | decimal(4,0) | YES  |     | NULL    |       |
+| hiredate | date         | YES  |     | NULL    |       |
+| sal      | decimal(7,2) | YES  |     | NULL    |       |
+| comm     | decimal(7,2) | YES  |     | NULL    |       |
+| deptno   | decimal(2,0) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+
+
+mysql> select e.ename,e.job,e.sal,d.dname,d.deptno
+    -> from emp e
+    -> join dept d on e.deptno = d.deptno;
++--------+-----------+---------+------------+--------+
+| ename  | job       | sal     | dname      | deptno |
++--------+-----------+---------+------------+--------+
+| SMITH  | CLERK     |  800.00 | RESEARCH   |     20 |
+| ALLEN  | SALESMAN  | 1600.00 | SALES      |     30 |
+| WARD   | SALESMAN  | 1250.00 | SALES      |     30 |
+| JONES  | MANAGER   | 2975.00 | RESEARCH   |     20 |
+| MARTIN | SALESMAN  | 1250.00 | SALES      |     30 |
+| BLAKE  | MANAGER   | 2850.00 | SALES      |     30 |
+| CLARK  | MANAGER   | 2450.00 | ACCOUNTING |     10 |
+| SCOTT  | ANALYST   | 3000.00 | RESEARCH   |     20 |
+| KING   | PRESIDENT | 5000.00 | ACCOUNTING |     10 |
+| TURNER | SALESMAN  | 1500.00 | SALES      |     30 |
+| ADAMS  | CLERK     | 1100.00 | RESEARCH   |     20 |
+| JAMES  | CLERK     |  950.00 | SALES      |     30 |
+| FORD   | ANALYST   | 3000.00 | RESEARCH   |     20 |
+| MILLER | CLERK     | 1300.00 | ACCOUNTING |     10 |
++--------+-----------+---------+------------+--------+
+14 rows in set (0.01 sec)
+
+mysql> select distinct e.job
+    -> from emp e
+    -> join dept d on e.deptno = d.deptno
+    -> where d.loc = 'dallas';
++---------+
+| job     |
++---------+
+| CLERK   |
+| MANAGER |
+| ANALYST |
++---------+
+3 rows in set (0.00 sec)
+
+mysql> select 
+    -> d.dname,count(*) as num_emp
+    -> from dept d
+    -> join emp e on d.deptno = e.deptno
+    -> group by d.dname;
++------------+---------+
+| dname      | num_emp |
++------------+---------+
+| RESEARCH   |       5 |
+| SALES      |       6 |
+| ACCOUNTING |       3 |
++------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT
+    ->          e.empno,
+    ->          e.ename,
+    ->          e.deptno,
+    ->          d.dname AS dept_name
+    ->      from emp e
+    ->        right join
+    ->      dept d on e.deptno = d.deptno;
++-------+--------+--------+------------+
+| empno | ename  | deptno | dept_name  |
++-------+--------+--------+------------+
+|  7934 | MILLER |     10 | ACCOUNTING |
+|  7839 | KING   |     10 | ACCOUNTING |
+|  7782 | CLARK  |     10 | ACCOUNTING |
+|  7902 | FORD   |     20 | RESEARCH   |
+|  7876 | ADAMS  |     20 | RESEARCH   |
+|  7788 | SCOTT  |     20 | RESEARCH   |
+|  7566 | JONES  |     20 | RESEARCH   |
+|  7369 | SMITH  |     20 | RESEARCH   |
+|  7900 | JAMES  |     30 | SALES      |
+|  7844 | TURNER |     30 | SALES      |
+|  7698 | BLAKE  |     30 | SALES      |
+|  7654 | MARTIN |     30 | SALES      |
+|  7521 | WARD   |     30 | SALES      |
+|  7499 | ALLEN  |     30 | SALES      |
+|  NULL | NULL   |   NULL | OPERATIONS |
++-------+--------+--------+------------+
+15 rows in set (0.00 sec)
+
+mysql> select e1.ename AS emp_name,e2.ename as manager_name
+    -> from emp e1
+    -> left join
+    -> emp e2 on e1.mgr = e2.empno;
++----------+--------------+
+| emp_name | manager_name |
++----------+--------------+
+| SMITH    | FORD         |
+| ALLEN    | BLAKE        |
+| WARD     | BLAKE        |
+| JONES    | KING         |
+| MARTIN   | BLAKE        |
+| BLAKE    | KING         |
+| CLARK    | KING         |
+| SCOTT    | JONES        |
+| KING     | NULL         |
+| TURNER   | BLAKE        |
+| ADAMS    | SCOTT        |
+| JAMES    | BLAKE        |
+| FORD     | JONES        |
+| MILLER   | CLARK        |
++----------+--------------+
+14 rows in set (0.00 sec)
+
+mysql> SELECT d.dname, COUNT(*) AS num_employees
+    -> FROM
+    ->     dept d
+    -> JOIN
+    ->     emp e ON d.deptno = e.deptno
+    -> GROUP BY
+    ->     d.deptno, d.dname
+    -> ORDER BY
+    ->     num_employees DESC
+    -> LIMIT 1;
++-------+---------------+
+| dname | num_employees |
++-------+---------------+
+| SALES |             6 |
++-------+---------------+
+1 row in set (0.00 sec)
+
+
+mysql> select ename,e.sal,j.grade
+    -> from emp e
+    -> join salarygrades j
+    -> on e.sal between j.minsalary and j.maxsalary;
++--------+---------+-------+
+| ename  | sal     | grade |
++--------+---------+-------+
+| SMITH  |  800.00 |     1 |
+| ALLEN  | 1600.00 |     3 |
+| WARD   | 1250.00 |     1 |
+| JONES  | 2975.00 |     4 |
+| MARTIN | 1250.00 |     1 |
+| BLAKE  | 2850.00 |     4 |
+| CLARK  | 2450.00 |     4 |
+| SCOTT  | 3000.00 |     4 |
+| KING   | 5000.00 |     5 |
+| TURNER | 1500.00 |     2 |
+| ADAMS  | 1100.00 |     1 |
+| JAMES  |  950.00 |     1 |
+| FORD   | 3000.00 |     4 |
+| MILLER | 1300.00 |     1 |
++--------+---------+-------+
+14 rows in set (0.00 sec)
+
+mysql> select
+    -> e.empno,e.ename,e.job as 'department_name',d.loc,sg.grade
+    -> from emp e
+    -> join
+    -> dept d on e.deptno = d.deptno
+    -> join
+    -> salarygrades sg on e.sal between sg.minsalary and sg.maxsalary;
++-------+--------+-----------------+----------+-------+
+| empno | ename  | department_name | loc      | grade |
++-------+--------+-----------------+----------+-------+
+|  7934 | MILLER | CLERK           | NEW YORK |     1 |
+|  7900 | JAMES  | CLERK           | CHICAGO  |     1 |
+|  7876 | ADAMS  | CLERK           | DALLAS   |     1 |
+|  7654 | MARTIN | SALESMAN        | CHICAGO  |     1 |
+|  7521 | WARD   | SALESMAN        | CHICAGO  |     1 |
+|  7369 | SMITH  | CLERK           | DALLAS   |     1 |
+|  7844 | TURNER | SALESMAN        | CHICAGO  |     2 |
+|  7499 | ALLEN  | SALESMAN        | CHICAGO  |     3 |
+|  7902 | FORD   | ANALYST         | DALLAS   |     4 |
+|  7788 | SCOTT  | ANALYST         | DALLAS   |     4 |
+|  7782 | CLARK  | MANAGER         | NEW YORK |     4 |
+|  7698 | BLAKE  | MANAGER         | CHICAGO  |     4 |
+|  7566 | JONES  | MANAGER         | DALLAS   |     4 |
+|  7839 | KING   | PRESIDENT       | NEW YORK |     5 |
++-------+--------+-----------------+----------+-------+
+14 rows in set (0.00 sec)
+
+
+mysql> SELECT
+    ->     e.empno,
+    ->     e.ename,
+    ->     e.job,
+    ->     COALESCE(e.deptno, 'Not Assigned') AS deptno,
+    ->     COALESCE(d.dname, 'No Department') AS dname,
+    ->     COALESCE(d.loc, 'No Location') AS loc
+    -> FROM
+    ->     emp e
+    -> LEFT JOIN
+    ->     dept d ON e.deptno = d.deptno
+    -> ORDER BY
+    ->     e.empno;
++-------+--------+-----------+--------+------------+----------+
+| empno | ename  | job       | deptno | dname      | loc      |
++-------+--------+-----------+--------+------------+----------+
+|  7369 | SMITH  | CLERK     | 20     | RESEARCH   | DALLAS   |
+|  7499 | ALLEN  | SALESMAN  | 30     | SALES      | CHICAGO  |
+|  7521 | WARD   | SALESMAN  | 30     | SALES      | CHICAGO  |
+|  7566 | JONES  | MANAGER   | 20     | RESEARCH   | DALLAS   |
+|  7654 | MARTIN | SALESMAN  | 30     | SALES      | CHICAGO  |
+|  7698 | BLAKE  | MANAGER   | 30     | SALES      | CHICAGO  |
+|  7782 | CLARK  | MANAGER   | 10     | ACCOUNTING | NEW YORK |
+|  7788 | SCOTT  | ANALYST   | 20     | RESEARCH   | DALLAS   |
+|  7839 | KING   | PRESIDENT | 10     | ACCOUNTING | NEW YORK |
+|  7844 | TURNER | SALESMAN  | 30     | SALES      | CHICAGO  |
+|  7876 | ADAMS  | CLERK     | 20     | RESEARCH   | DALLAS   |
+|  7900 | JAMES  | CLERK     | 30     | SALES      | CHICAGO  |
+|  7902 | FORD   | ANALYST   | 20     | RESEARCH   | DALLAS   |
+|  7934 | MILLER | CLERK     | 10     | ACCOUNTING | NEW YORK |
++-------+--------+-----------+--------+------------+----------+
+14 rows in set (0.00 sec)

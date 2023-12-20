@@ -1,0 +1,246 @@
+
+
+mysql> SELECT COUNT(*) AS total_employees
+    -> FROM emp;
++-----------------+
+| total_employees |
++-----------------+
+|              14 |
++-----------------+
+1 row in set (0.02 sec)
+
+mysql> select 
+    -> sum(sal) as total_sal,
+    -> sum(comm) as total_comm
+    -> from emp;
++-----------+------------+
+| total_sal | total_comm |
++-----------+------------+
+|  29025.00 |    2200.00 |
++-----------+------------+
+1 row in set (0.00 sec)
+
+mysql> select 
+    -> max(sal) as maximum_sal
+    -> from emp;
++-------------+
+| maximum_sal |
++-------------+
+|     5000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select 
+    -> avg(sal) as avg_salary
+    -> from emp;
++-------------+
+| avg_salary  |
++-------------+
+| 2073.214286 |
++-------------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select hiredate
+    -> from emp
+    -> order by hiredate asc
+    -> limit 1;
++------------+
+| hiredate   |
++------------+
+| 1980-12-17 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select 
+    -> max(sal) as maximum_sal_for_clerk
+    -> from emp
+    -> where job = 'clerk';
++-----------------------+
+| maximum_sal_for_clerk |
++-----------------------+
+|               1300.00 |
++-----------------------+
+1 row in set (0.01 sec)
+
+mysql> select 
+    -> max(sal) as maximum_sal_for_dept20
+    -> from emp
+    -> where deptno = 20;
++------------------------+
+| maximum_sal_for_dept20 |
++------------------------+
+|                3000.00 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select 
+    -> min(sal) as minimum_sal_for_salesman
+    -> from emp
+    -> where job = 'salesman';
++--------------------------+
+| minimum_sal_for_salesman |
++--------------------------+
+|                  1250.00 |
++--------------------------+
+1 row in set (0.00 sec)
+
+mysql> select 
+    -> avg(sal) as avg_salary_manager
+    -> from emp
+    -> where job = 'manager';
++--------------------+
+| avg_salary_manager |
++--------------------+
+|        2758.333333 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select 
+    -> sum(sal) as total_sal_for_dept20And_analyst
+    -> from emp
+    -> where job = 'analyst' and deptno = 20;
++---------------------------------+
+| total_sal_for_dept20And_analyst |
++---------------------------------+
+|                         6000.00 |
++---------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select 
+    -> deptno, count(*) as total_employee
+    -> from emp
+    -> group by deptno;
++--------+----------------+
+| deptno | total_employee |
++--------+----------------+
+|     20 |              5 |
+|     30 |              6 |
+|     10 |              3 |
++--------+----------------+
+3 rows in set (0.01 sec)
+
+
+mysql> SELECT job, COUNT(*) AS total_employees
+    -> FROM emp
+    -> GROUP BY job;
++-----------+-----------------+
+| job       | total_employees |
++-----------+-----------------+
+| CLERK     |               4 |
+| SALESMAN  |               4 |
+| MANAGER   |               3 |
+| ANALYST   |               2 |
+| PRESIDENT |               1 |
++-----------+-----------------+
+5 rows in set (0.01 sec)
+
+
+
+mysql> SELECT deptno,sum(sal) AS total_sal
+    -> from emp
+    -> GROUP BY deptno;
++--------+-----------+
+| deptno | total_sal |
++--------+-----------+
+|     20 |  10875.00 |
+|     30 |   9400.00 |
+|     10 |   8750.00 |
++--------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT deptno,max(sal) AS max_sal
+    -> from emp
+    -> GROUP BY deptno;
++--------+---------+
+| deptno | max_sal |
++--------+---------+
+|     20 | 3000.00 |
+|     30 | 2850.00 |
+|     10 | 5000.00 |
++--------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT job,sum(sal) AS total_sal
+    -> from emp
+    -> GROUP BY job;
++-----------+-----------+
+| job       | total_sal |
++-----------+-----------+
+| CLERK     |   4150.00 |
+| SALESMAN  |   5600.00 |
+| MANAGER   |   8275.00 |
+| ANALYST   |   6000.00 |
+| PRESIDENT |   5000.00 |
++-----------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select job,min(sal) as min_sal
+    -> from emp
+    -> group by job;
++-----------+---------+
+| job       | min_sal |
++-----------+---------+
+| CLERK     |  800.00 |
+| SALESMAN  | 1250.00 |
+| MANAGER   | 2450.00 |
+| ANALYST   | 3000.00 |
+| PRESIDENT | 5000.00 |
++-----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select deptno,count(*) as total_employee
+    -> from emp
+    -> group by deptno
+    -> having total_employee >3;
++--------+----------------+
+| deptno | total_employee |
++--------+----------------+
+|     20 |              5 |
+|     30 |              6 |
++--------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> select job,count(*) as total_employee
+    -> from emp
+    -> group by job
+    -> having total_employee >3;
++----------+----------------+
+| job      | total_employee |
++----------+----------------+
+| CLERK    |              4 |
+| SALESMAN |              4 |
++----------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> select job,count(*) as total_employee
+    -> from emp
+    -> group by job
+    -> having total_employee >3;
++----------+----------------+
+| job      | total_employee |
++----------+----------------+
+| CLERK    |              4 |
+| SALESMAN |              4 |
++----------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> select job,sum(sal) as total_sal
+    -> from emp
+    -> group by job
+    -> having total_sal > 2500;
++-----------+-----------+
+| job       | total_sal |
++-----------+-----------+
+| CLERK     |   4150.00 |
+| SALESMAN  |   5600.00 |
+| MANAGER   |   8275.00 |
+| ANALYST   |   6000.00 |
+| PRESIDENT |   5000.00 |
++-----------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> exit

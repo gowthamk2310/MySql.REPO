@@ -1,0 +1,346 @@
+mysql> tee D:\SQL\MYSQL Tasks\dec2
+mysql> CREATE TABLE Person (
+    ->     person_id INT PRIMARY KEY,
+    ->     pname VARCHAR(255),
+    ->     dob DATE
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+
+mysql> create Table Person(
+    -> Person_id int primary key auto_increment,
+    -> pname varchar(25) not null,
+    -> dob date not null);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into person (pname,dob) values('Ajay','2002-02-12');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from person;
++-----------+-------+------------+
+| Person_id | pname | dob        |
++-----------+-------+------------+
+|         1 | Ajay  | 2002-02-12 |
++-----------+-------+------------+
+1 row in set (0.00 sec)
+
+mysql> insert into person (pname,dob) values('Ashwin','2001-12-02'),
+    -> ('Arun','1999-08-11')
+    -> ,
+    -> ('Anish','1989-09-23'),
+    -> ('Arul','2002-02-02');
+Query OK, 4 rows affected (0.00 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from person;
++-----------+--------+------------+
+| Person_id | pname  | dob        |
++-----------+--------+------------+
+|         1 | Ajay   | 2002-02-12 |
+|         2 | Ashwin | 2001-12-02 |
+|         3 | Arun   | 1999-08-11 |
+|         4 | Anish  | 1989-09-23 |
+|         5 | Arul   | 2002-02-02 |
++-----------+--------+------------+
+5 rows in set (0.00 sec)
+
+
+mysql> CREATE TABLE Residency (
+    ->     residence_id INT PRIMARY KEY auto_increment,
+    ->     person_id INT,
+    ->     city_id INT not null,
+    ->     cityname VARCHAR(255) not null,
+    ->     population INT not null,
+    ->     FOREIGN KEY (person_id) REFERENCES Person(person_id)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+
+mysql> select * from residency;
+Empty set (0.00 sec)
+
+mysql> INSERT INTO Residency (person_id,city_id, cityname, population) VALUES
+    -> (1,101, 'Sydney', 5000000),
+    -> (2, 102, 'Melbourne', 4500000),
+    -> (3, 103, 'Brisbane', 2300000),
+    -> (4, 104, 'Perth', 2000000),
+    -> (5, 105, 'Adelaide', 1300000);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from residency;
++--------------+-----------+---------+-----------+------------+
+| residence_id | person_id | city_id | cityname  | population |
++--------------+-----------+---------+-----------+------------+
+|            1 |         1 |     101 | Sydney    |    5000000 |
+|            2 |         2 |     102 | Melbourne |    4500000 |
+|            3 |         3 |     103 | Brisbane  |    2300000 |
+|            4 |         4 |     104 | Perth     |    2000000 |
+|            5 |         5 |     105 | Adelaide  |    1300000 |
++--------------+-----------+---------+-----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Transport (
+    ->     transport_id INT PRIMARY KEY auto_increment,
+    ->     transport_type VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> alter table transport
+    -> add constraint transport_type check(transport_type in('bus','train','car'));
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into transport (transport_type) values
+    -> ('bus'),('train'),('bus'),('car'),('car');
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from transport;
++--------------+----------------+
+| transport_id | transport_type |
++--------------+----------------+
+|            1 | bus            |
+|            2 | train          |
+|            3 | bus            |
+|            4 | car            |
+|            5 | car            |
++--------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Transport_preference (
+    ->     transport_id INT,
+    ->     person_id INT,
+    ->     FOREIGN KEY (transport_id) REFERENCES Transport(transport_id),
+    ->     FOREIGN KEY (person_id) REFERENCES Person(person_id)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> 
+mysql> INSERT INTO Transport_preference (transport_id, person_id) VALUES
+    -> (1, 1),
+    -> (2, 2),
+    -> (3, 3),
+    -> (4, 4),
+    -> (5, 5);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> select * from person;
++-----------+--------+------------+
+| Person_id | pname  | dob        |
++-----------+--------+------------+
+|         1 | Ajay   | 2002-02-12 |
+|         2 | Ashwin | 2001-12-02 |
+|         3 | Arun   | 1999-08-11 |
+|         4 | Anish  | 1989-09-23 |
+|         5 | Arul   | 2002-02-02 |
++-----------+--------+------------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT COUNT(DISTINCT person_id) AS total_people
+    -> FROM Residency
+    -> WHERE cityname = 'MELBOURNE';
++--------------+
+| total_people |
++--------------+
+|            1 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select* from transport_preference;
++--------------+-----------+
+| transport_id | person_id |
++--------------+-----------+
+|            1 |         1 |
+|            2 |         2 |
+|            3 |         3 |
+|            4 |         4 |
+|            5 |         5 |
++--------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT p.person_id, p.pname
+    -> FROM Person p
+    -> JOIN Transport_preference tp ON p.person_id = tp.person_id
+    -> JOIN Transport t ON tp.transport_id = t.transport_id
+    -> WHERE t.transport_type = 'Train';
++-----------+--------+
+| person_id | pname  |
++-----------+--------+
+|         2 | Ashwin |
++-----------+--------+
+1 row in set (0.01 sec)
+
+mysql> select* from transport_preference;
++--------------+-----------+
+| transport_id | person_id |
++--------------+-----------+
+|            1 |         1 |
+|            2 |         2 |
+|            3 |         3 |
+|            4 |         4 |
+|            5 |         5 |
++--------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select* from transport;
++--------------+----------------+
+| transport_id | transport_type |
++--------------+----------------+
+|            1 | bus            |
+|            2 | train          |
+|            3 | bus            |
+|            4 | car            |
+|            5 | car            |
++--------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select* from person;
++-----------+--------+------------+
+| Person_id | pname  | dob        |
++-----------+--------+------------+
+|         1 | Ajay   | 2002-02-12 |
+|         2 | Ashwin | 2001-12-02 |
+|         3 | Arun   | 1999-08-11 |
+|         4 | Anish  | 1989-09-23 |
+|         5 | Arul   | 2002-02-02 |
++-----------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select* from residency;
++--------------+-----------+---------+-----------+------------+
+| residence_id | person_id | city_id | cityname  | population |
++--------------+-----------+---------+-----------+------------+
+|            1 |         1 |     101 | Sydney    |    5000000 |
+|            2 |         2 |     102 | Melbourne |    4500000 |
+|            3 |         3 |     103 | Brisbane  |    2300000 |
+|            4 |         4 |     104 | Perth     |    2000000 |
+|            5 |         5 |     105 | Adelaide  |    1300000 |
++--------------+-----------+---------+-----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> update transport set transport_type = 'car'
+    -> where transport_id = 1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT p.person_id, p.pname, r.residence_id, r.cityname, tp.transport_id
+    -> FROM Person p
+    -> JOIN Residency r ON p.person_id = r.person_id
+    -> JOIN Transport_preference tp ON p.person_id = tp.person_id
+    -> JOIN Transport t ON tp.transport_id = t.transport_id
+    -> WHERE r.cityname = 'SYDNEY' AND t.transport_type = 'Car';
++-----------+-------+--------------+----------+--------------+
+| person_id | pname | residence_id | cityname | transport_id |
++-----------+-------+--------------+----------+--------------+
+|         1 | Ajay  |            1 | Sydney   |            1 |
++-----------+-------+--------------+----------+--------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT COUNT(p.person_id) AS total_persons_in_brisbane
+    -> FROM Person p
+    -> JOIN Residency r ON p.person_id = r.person_id
+    -> WHERE r.cityname = 'BRISBANE';
++---------------------------+
+| total_persons_in_brisbane |
++---------------------------+
+|                         1 |
++---------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT cityname, SUM(population) AS total_population
+    -> FROM Residency
+    -> GROUP BY cityname
+    -> ORDER BY total_population DESC;
++-----------+------------------+
+| cityname  | total_population |
++-----------+------------------+
+| Sydney    |          5000000 |
+| Melbourne |          4500000 |
+| Brisbane  |          2300000 |
+| Perth     |          2000000 |
+| Adelaide  |          1300000 |
++-----------+------------------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT r.cityname, COUNT(DISTINCT p.person_id) AS total_persons
+    -> FROM Residency r
+    -> JOIN Person p ON r.person_id = p.person_id
+    -> GROUP BY r.cityname
+    -> ORDER BY total_persons DESC;
++-----------+---------------+
+| cityname  | total_persons |
++-----------+---------------+
+| Adelaide  |             1 |
+| Brisbane  |             1 |
+| Melbourne |             1 |
+| Perth     |             1 |
+| Sydney    |             1 |
++-----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT t.transport_type, COUNT(DISTINCT tp.person_id) AS total_people
+    -> FROM Transport t
+    -> LEFT JOIN Transport_preference tp ON t.transport_id = tp.transport_id
+    -> GROUP BY t.transport_type;
++----------------+--------------+
+| transport_type | total_people |
++----------------+--------------+
+| bus            |            1 |
+| car            |            3 |
+| train          |            1 |
++----------------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> SELECT p.pname
+    -> FROM Person p
+    -> JOIN Residency r ON p.person_id = r.person_id
+    -> JOIN Transport_preference tp ON p.person_id = tp.person_id
+    -> JOIN Transport t ON tp.transport_id = t.transport_id
+    -> WHERE r.cityname = 'BRISBANE' AND t.transport_type = 'Bus';
++-------+
+| pname |
++-------+
+| Arun  |
++-------+
+1 row in set (0.00 sec)
+
+mysql> SELECT COUNT(DISTINCT cityname) AS cities_over_15m_population
+    -> FROM Residency
+    -> GROUP BY cityname
+    -> HAVING SUM(population) > 15000000;
+Empty set (0.01 sec)
+
+mysql> 
+mysql> SELECT COUNT(DISTINCT cityname) AS cities_over_15m_population
+    -> FROM Residency
+    -> GROUP BY cityname
+    -> HAVING SUM(population) > 1500000;
++----------------------------+
+| cities_over_15m_population |
++----------------------------+
+|                          1 |
+|                          1 |
+|                          1 |
+|                          1 |
++----------------------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT t.transport_type, COUNT(DISTINCT tp.person_id) AS total_persons
+    -> FROM Transport t
+    -> LEFT JOIN Transport_preference tp ON t.transport_id = tp.transport_id
+    -> GROUP BY t.transport_type;
++----------------+---------------+
+| transport_type | total_persons |
++----------------+---------------+
+| bus            |             1 |
+| car            |             3 |
+| train          |             1 |
++----------------+---------------+
+3 rows in set (0.00 sec)
+
+mysql> exit
+mysql> Terminal close -- exit!

@@ -1,0 +1,144 @@
+
+
+mysql> Create table  Customer(
+    -> Customer_id int,
+    -> Custom_name varchar(50),
+    -> City varchar(50),
+    -> Grade varchar(50),
+    -> Salesman_id int);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into Customer values(3002,'Nick Rimando','New York',100,5001);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Customer values(3007,'Brad Davis','New York',100,5001);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_mc22 |
++----------------+
+| customer       |
++----------------+
+1 row in set (0.01 sec)
+
+mysql> select * from Customer;
++-------------+--------------+------------+-------+-------------+
+| Customer_id | Custom_name  | City       | Grade | Salesman_id |
++-------------+--------------+------------+-------+-------------+
+|        3002 | Nick Rimando | New York   | 100   |        5001 |
+|        3007 | Brad Davis   | New York   | 100   |        5001 |
+|        3005 | Graham Zusi  | California | 200   |        5001 |
++-------------+--------------+------------+-------+-------------+
+3 rows in set (0.00 sec)
+
+
+mysql> insert into Customer values(3005,'Graham Zusi','CalForina',200,5002),(3008,'Julian Green','London',300,5002),(3008,'Fabian Johnson','Paris',300,5006),(3009,'Geoff Cameron','Berlin',100,5007),(3003,'Jozy Altidor','Moscow',200,5007),(3001,'Brad Guzan','London',300,5005);
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from Customer;
++-------------+----------------+------------+-------+-------------+
+| Customer_id | Custom_name    | City       | Grade | Salesman_id |
++-------------+----------------+------------+-------+-------------+
+|        3002 | Nick Rimando   | New York   | 100   |        5001 |
+|        3007 | Brad Davis     | New York   | 100   |        5001 |
+|        3005 | Graham Zusi    | California | 200   |        5001 |
+|        3005 | Graham Zusi    | CalForina  | 200   |        5002 |
+|        3008 | Julian Green   | London     | 300   |        5002 |
+|        3008 | Fabian Johnson | Paris      | 300   |        5006 |
+|        3009 | Geoff Cameron  | Berlin     | 100   |        5007 |
+|        3003 | Jozy Altidor   | Moscow     | 200   |        5007 |
+|        3001 | Brad Guzan     | London     | 300   |        5005 |
++-------------+----------------+------------+-------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> Update Customer set Customer_id = 3004 where city='Paris';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+mysql> select Custom_name from customer where  SUBSTRING(Custom_name,Length(Custom_name)-1,1)='o';
++----------------+
+| Custom_name    |
++----------------+
+| Fabian Johnson |
+| Geoff Cameron  |
+| Jozy Altidor   |
++----------------+
+3 rows in set (0.00 sec)
+
+
+
+mysql> select Customer_id,Custom_name,City,Grade,Salesman_id from Customer where city !='New York' and grade > 100;
++-------------+----------------+------------+-------+-------------+
+| Customer_id | Custom_name    | City       | Grade | Salesman_id |
++-------------+----------------+------------+-------+-------------+
+|        3005 | Graham Zusi    | California | 200   |        5001 |
+|        3005 | Graham Zusi    | CalForina  | 200   |        5002 |
+|        3008 | Julian Green   | London     | 300   |        5002 |
+|        3004 | Fabian Johnson | Paris      | 300   |        5006 |
+|        3003 | Jozy Altidor   | Moscow     | 200   |        5007 |
+|        3001 | Brad Guzan     | London     | 300   |        5005 |
++-------------+----------------+------------+-------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Customer where (city = 'Califorina' or city='London') and grade between 200 and 300;
++-------------+--------------+--------+-------+-------------+
+| Customer_id | Custom_name  | City   | Grade | Salesman_id |
++-------------+--------------+--------+-------+-------------+
+|        3008 | Julian Green | London | 300   |        5002 |
+|        3001 | Brad Guzan   | London | 300   |        5005 |
++-------------+--------------+--------+-------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> select * From Customer where Salesman_id = 5002;
++-------------+--------------+-----------+-------+-------------+
+| Customer_id | Custom_name  | City      | Grade | Salesman_id |
++-------------+--------------+-----------+-------+-------------+
+|        3005 | Graham Zusi  | CalForina | 200   |        5002 |
+|        3008 | Julian Green | London    | 300   |        5002 |
++-------------+--------------+-----------+-------+-------------+
+2 rows in set (0.00 sec)
+
+
+mysql> select city,Custom_name from Customer order by city asc,Custom_name desc;
++------------+----------------+
+| city       | Custom_name    |
++------------+----------------+
+| Berlin     | Geoff Cameron  |
+| CalForina  | Graham Zusi    |
+| California | Graham Zusi    |
+| London     | Julian Green   |
+| London     | Brad Guzan     |
+| Moscow     | Jozy Altidor   |
+| New York   | Nick Rimando   |
+| New York   | Brad Davis     |
+| Paris      | Fabian Johnson |
++------------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> select distinct city from Customer;
++------------+
+| city       |
++------------+
+| New York   |
+| California |
+| CalForina  |
+| London     |
+| Paris      |
+| Berlin     |
+| Moscow     |
++------------+
+7 rows in set (0.01 sec)
+
+mysql> select * from Customer where city ='London' and (Salesman_id = 5002 or salesman_id = 5005);
++-------------+--------------+--------+-------+-------------+
+| Customer_id | Custom_name  | City   | Grade | Salesman_id |
++-------------+--------------+--------+-------+-------------+
+|        3008 | Julian Green | London | 300   |        5002 |
+|        3001 | Brad Guzan   | London | 300   |        5005 |
++-------------+--------------+--------+-------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> exit

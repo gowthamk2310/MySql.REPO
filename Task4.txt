@@ -1,0 +1,58 @@
+
+mysql> CREATE TABLE distribution_companies (
+    ->     Cid INT PRIMARY KEY,
+    ->     company_name VARCHAR(255) UNIQUE NOT NULL,
+    ->     head_office VARCHAR(255),
+    ->     mobile_number VARCHAR(15) NOT NULL
+    -> );
+use
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TABLE movies (
+    ->     Mid INT PRIMARY KEY,
+    ->     movie_title VARCHAR(255),
+    ->     imdb_rating DECIMAL(3, 1) CHECK (imdb_rating BETWEEN 1 AND 10),
+    ->     year_released INT
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> Create Table movie_distribution (
+    ->     Did INT PRIMARY KEY,
+    ->     Movie_id INT,
+    ->     Company_id INT,
+    ->     year_of_distribution INT CHECK (year_of_distribution < 2023),
+    ->     FOREIGN KEY (Movie_id) REFERENCES movies(Mid),
+    ->     FOREIGN KEY (Company_id) REFERENCES distribution_companies(Cid)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> Insert into distribution_companies (Cid, company_name, head_office, mobile_number) VALUES
+    ->     (1, 'Company A', 'Cbe', '123-456-7890'),
+    ->     (2, 'Company B', 'Chennai B', '987-654-3210'),
+    ->     (3, 'Company C', 'Cbe', '555-123-4567'),
+    ->     (4, 'Company D', 'Chennai', '111-222-3333'),
+    ->     (5, 'Company E', 'Coimbatore', '444-555-6666');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> Insert into movies (Mid, movie_title, imdb_rating, year_released) VALUES
+    ->     (1, 'Movie X', 8.5, 2020),
+    ->     (2, 'Movie Y', 7.2, 2018),
+    ->     (3, 'Movie Z', 9.0, 2022),
+    ->     (4, 'Movie P', 6.5, 2019),
+    ->     (5, 'Movie Q', 8.0, 2021);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> Insert into movie_distribution (Did, Movie_id, Company_id, year_of_distribution) VALUES
+    ->     (1, 1, 1, 2021),
+    ->     (2, 2, 2, 2020),
+    ->     (3, 3, 3, 2022),
+    ->     (4, 4, 4, 2019),
+    ->     (5, 5, 5, 2020);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql>

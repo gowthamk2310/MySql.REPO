@@ -1,0 +1,200 @@
+
+
+mysql> select dayname('2001-10-23') as 'Day in Dob' from dual;
++------------+
+| Day in Dob |
++------------+
+| Tuesday    |
++------------+
+1 row in set (0.00 sec)
+mysql> select * from emp;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+14 rows in set (0.01 sec)
+
+mysql> select concat (dayname(hiredate),' The ',dayofmonth(hiredate),' of ',monthname(hiredate),' ',year(hiredate)) as Hire_date from emp;
++-----------------------------------+
+| Hire_date                         |
++-----------------------------------+
+| Wednesday The 17 of December 1980 |
+| Friday The 20 of February 1981    |
+| Sunday The 22 of February 1981    |
+| Thursday The 2 of April 1981      |
+| Monday The 28 of September 1981   |
+| Friday The 1 of May 1981          |
+| Tuesday The 9 of June 1981        |
+| Thursday The 9 of December 1982   |
+| Tuesday The 17 of November 1981   |
+| Tuesday The 8 of September 1981   |
+| Wednesday The 12 of January 1983  |
+| Thursday The 3 of December 1981   |
+| Thursday The 3 of December 1981   |
+| Saturday The 23 of January 1982   |
++-----------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> 
+
+
+mysql> select date_add('2001-10-23', interval 25 year) as date_of_25th_birthday from dual;
++-----------------------+
+| date_of_25th_birthday |
++-----------------------+
+| 2026-10-23            |
++-----------------------+
+1 row in set (0.00 sec)
+
+mysql> select datediff(curdate(),'1950-01-26')/365 as "years_after_republic_day" from dual;
++--------------------------+
+| years_after_republic_day |
++--------------------------+
+|                  73.9178 |
++--------------------------+
+1 row in set (0.00 sec)
+
+mysql> exit
+
+
+mysql> select ename,hiredate from emp
+    -> where dayofweek(hiredate) = 2;
++--------+------------+
+| ename  | hiredate   |
++--------+------------+
+| MARTIN | 1981-09-28 |
++--------+------------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select ename,hiredate from emp
+    -> where year(hiredate) = 1981;
++--------+------------+
+| ename  | hiredate   |
++--------+------------+
+| ALLEN  | 1981-02-20 |
+| WARD   | 1981-02-22 |
+| JONES  | 1981-04-02 |
+| MARTIN | 1981-09-28 |
+| BLAKE  | 1981-05-01 |
+| CLARK  | 1981-06-09 |
+| KING   | 1981-11-17 |
+| TURNER | 1981-09-08 |
+| JAMES  | 1981-12-03 |
+| FORD   | 1981-12-03 |
++--------+------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+mysql> select concat(ename,' earns$ ',sal,' monthly but wants $ ',sal*3,' monthly. ')as employee_statement from emp;
++-------------------------------------------------------------+
+| employee_statement                                          |
++-------------------------------------------------------------+
+| SMITH earns$ 800.00 monthly but wants $ 2400.00 monthly.    |
+| ALLEN earns$ 1600.00 monthly but wants $ 4800.00 monthly.   |
+| WARD earns$ 1250.00 monthly but wants $ 3750.00 monthly.    |
+| JONES earns$ 2975.00 monthly but wants $ 8925.00 monthly.   |
+| MARTIN earns$ 1250.00 monthly but wants $ 3750.00 monthly.  |
+| BLAKE earns$ 2850.00 monthly but wants $ 8550.00 monthly.   |
+| CLARK earns$ 2450.00 monthly but wants $ 7350.00 monthly.   |
+| SCOTT earns$ 3000.00 monthly but wants $ 9000.00 monthly.   |
+| KING earns$ 5000.00 monthly but wants $ 15000.00 monthly.   |
+| TURNER earns$ 1500.00 monthly but wants $ 4500.00 monthly.  |
+| ADAMS earns$ 1100.00 monthly but wants $ 3300.00 monthly.   |
+| JAMES earns$ 950.00 monthly but wants $ 2850.00 monthly.    |
+| FORD earns$ 3000.00 monthly but wants $ 9000.00 monthly.    |
+| MILLER earns$ 1300.00 monthly but wants $ 3900.00 monthly.  |
++-------------------------------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,
+    -> case 
+    -> when comm is not null then comm
+    -> else 'no commision'
+    -> end as commision
+    -> from emp;
++--------+--------------+
+| ename  | commision    |
++--------+--------------+
+| SMITH  | no commision |
+| ALLEN  | 300.00       |
+| WARD   | 500.00       |
+| JONES  | no commision |
+| MARTIN | 1400.00      |
+| BLAKE  | no commision |
+| CLARK  | no commision |
+| SCOTT  | no commision |
+| KING   | no commision |
+| TURNER | 0.00         |
+| ADAMS  | no commision |
+| JAMES  | no commision |
+| FORD   | no commision |
+| MILLER | no commision |
++--------+--------------+
+14 rows in set (0.00 sec)
+
+mysql> select ename,deptno,job,
+    -> case
+    -> when job ='president' then 'A grade'
+    -> when job ='manager' then 'B grade'
+    -> when job ='analyst' then 'C grade'
+    -> when job ='salesman' then 'D grade'
+    -> when job ='clerk' then 'E grade'
+    -> else 'O grade'
+    -> end as grade from emp;
++--------+--------+-----------+---------+
+| ename  | deptno | job       | grade   |
++--------+--------+-----------+---------+
+| SMITH  |     20 | CLERK     | E grade |
+| ALLEN  |     30 | SALESMAN  | D grade |
+| WARD   |     30 | SALESMAN  | D grade |
+| JONES  |     20 | MANAGER   | B grade |
+| MARTIN |     30 | SALESMAN  | D grade |
+| BLAKE  |     30 | MANAGER   | B grade |
+| CLARK  |     10 | MANAGER   | B grade |
+| SCOTT  |     20 | ANALYST   | C grade |
+| KING   |     10 | PRESIDENT | A grade |
+| TURNER |     30 | SALESMAN  | D grade |
+| ADAMS  |     20 | CLERK     | E grade |
+| JAMES  |     30 | CLERK     | E grade |
+| FORD   |     20 | ANALYST   | C grade |
+| MILLER |     10 | CLERK     | E grade |
++--------+--------+-----------+---------+
+14 rows in set (0.00 sec)
+
+mysql> exit

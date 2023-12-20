@@ -1,0 +1,221 @@
+mysql> use database mc23;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mc17               |
+| mc23               |
+| mc617              |
+| mysql              |
+| performance_schema |
+| player             |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+10 rows in set (0.01 sec)
+
+mysql> use mc23;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_mc23 |
++----------------+
+| adarsh_paal    |
+| player         |
+| students       |
+| table1         |
++----------------+
+4 rows in set (0.01 sec)
+
+mysql> use mc617;
+Database changed
+mysql> show tables;
++-----------------+
+| Tables_in_mc617 |
++-----------------+
+| dept            |
+| emp             |
+| kgm_students    |
+| mark            |
+| marks           |
+| player          |
+| vdept30         |
+| view_dept       |
+| view_name       |
+| vout            |
++-----------------+
+10 rows in set (0.00 sec)
+
+mysql> Terminal close -- exit!
+mysql> create table Customers(
+    -> CustomerID int primary key,
+    -> Name varchar(30) not null,
+    -> City varchar(30),
+    -> PhNo bigint not null);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> Create table Salesman(
+    -> SalesmanID int  primary key,
+    -> Name varchar(30) not null,
+    -> PhNo bigint);
+Query OK, 0 rows affected (0.01 sec)
+
+
+mysql> Create table Products(
+    -> ProductID int primary key,
+    -> Name varchar(30) not null,
+    -> Price decimal(10,2) not null,
+    -> Quantity int not null);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> Create table Orders(
+    -> OrderID int primary key,
+    -> CustomerID int,
+    -> SalesmanID int,
+    -> ProductID int,
+    -> Order_Date Date,
+    -> Amount decimal(12,2) check (Amount >=100),
+    -> Foreign key(CustomerID) references Customers(CustomerID),
+    -> FOREIGN KEY (SalesmanID) REFERENCES Salesmen(SalesmanID),
+    ->     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+    -> );
+ERROR 1824 (HY000): Failed to open the referenced table 'salesmen'
+mysql> Create table Orders(
+    -> OrderID int primary key,
+    -> CustomerID int,
+    -> SalesmanID int,
+    -> ProductID int,
+    -> Order_Date Date,
+    -> Amount decimal(12,2) check (Amount >=100),
+    -> Foreign key(CustomerID) references Customers(CustomerID),
+    -> Foreign key(SalesmanID) references Salesman(SalesmanID),
+    -> Foreign key(ProductID) references Products(ProductID)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into Customers values
+    -> (1,'Jenin','New York','9999955555'),
+    -> (2,'Ajay','Arizona','6677667721'),
+    -> (3,'Asis Nova','Turkey','9677667721'),
+    -> (4,'Satesh','NewZealand','8767667721'),
+    -> (5,'Sanjai','Barbdos','7767667721')
+    -> ;
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into Salesman values
+    -> (1,'Nirmal Salesman'),
+    -> (2,'Nitish Seller'),
+    -> (3,'Timothy Trader'),
+    -> (4,'Adarsh Vendor'),
+    -> (5,'Philips Retailer');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into Salesman values
+    -> (1,'Nirmal Salesman',9898898900),
+    -> (2,'Nitish Seller',7879709098),
+    -> (3,'Timothy Trader',6787665522),
+    -> (4,'Adarsh Vendor',6356450021),
+    -> (5,'Philips Retailer',9090807011);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> Insert into Products values
+    -> (1,'Laptop',8000.00,50),
+    -> (2,'Television',6000.00,40),
+    -> (3,'Fridge',20000.00,80),
+    -> (4,'Coffee Maker',1000.00,60),
+    -> (5,'Table Fan',1200.00,70);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into Orders values
+    -> (1, 1, 1, 1, '2023-01-01', 800.00),
+    -> (2, 2, 2, 2, '2023-02-02', 500.00),
+    -> (3, 3, 3, 3, '2023-03-03', 700.00),
+    -> (4, 4, 4, 4, '2023-04-04', 150.00),
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 5
+mysql> insert into Orders values
+    -> (1, 1, 1, 1, '2023-01-01', 8000.00),
+    -> (2, 2, 2, 2, '2023-02-02', 6000.00),
+    -> (3, 3, 3, 3, '2023-03-03', 20000.00),
+    -> (4, 4, 4, 4, '2023-04-04', 1000.00),
+    -> (5, 5, 5, 5, '2023-04-04', 1200.00);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> desc Customers;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| CustomerID | int         | NO   | PRI | NULL    |       |
+| Name       | varchar(30) | NO   |     | NULL    |       |
+| City       | varchar(30) | YES  |     | NULL    |       |
+| PhNo       | bigint      | NO   |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> desc Salesman;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| SalesmanID | int         | NO   | PRI | NULL    |       |
+| Name       | varchar(30) | NO   |     | NULL    |       |
+| PhNo       | bigint      | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc Products;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| ProductID | int           | NO   | PRI | NULL    |       |
+| Name      | varchar(30)   | NO   |     | NULL    |       |
+| Price     | decimal(10,2) | NO   |     | NULL    |       |
+| Quantity  | int           | NO   |     | NULL    |       |
++-----------+---------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc Orders;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| OrderID    | int           | NO   | PRI | NULL    |       |
+| CustomerID | int           | YES  | MUL | NULL    |       |
+| SalesmanID | int           | YES  | MUL | NULL    |       |
+| ProductID  | int           | YES  | MUL | NULL    |       |
+| Order_Date | date          | YES  |     | NULL    |       |
+| Amount     | decimal(12,2) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> update Products
+    -> set Quantity = 100;
+Query OK, 5 rows affected (0.00 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+mysql> Alter table Orders
+    -> change column Order_Date DOB date;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update Products
+    -> set price = price*1.15
+    -> where name ='Coffee Maker';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+
+mysql> Alter Table Customers
+    -> modify Column Name varchar(30);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> exit
